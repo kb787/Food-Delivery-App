@@ -8,11 +8,17 @@ const express_port_no = process.env.express_server_port_no;
 const databaseConnection = require("./dbConfiguration");
 const base_api_endpoint = process.env.base_api_endpoint;
 const { signinRouter, signupRouter } = require("./auth-controllers");
+const {
+  otpSendingRouter,
+  passwordChangingRouter,
+} = require("./verification-controllers");
 
 databaseConnection();
 app.use(express.json());
 app.use(base_api_endpoint, signupRouter);
 app.use(base_api_endpoint, signinRouter);
+app.use(base_api_endpoint, otpSendingRouter);
+app.use(base_api_endpoint, passwordChangingRouter);
 app.get("/", (req, res) => {
   res.json({ message: `Application launched successfully` });
 });
