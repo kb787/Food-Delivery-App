@@ -5,7 +5,7 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 const sender_email = process.env.my_email;
-const sender_password = process.env.my_password;
+const sender_password = process.env.app_password;
 
 var transporter = nodemailer.createTransport({
   service: "gmail",
@@ -30,9 +30,9 @@ function sendMail(email, otp) {
 }
 
 const handleOtpSending = async (req, res) => {
-  const email = req.body.userEmail;
+  const { userEmail } = req.body;
   try {
-    const prevUser = await authModel.findOne({ email });
+    const prevUser = await authModel.findOne({ userEmail: req.body.userEmail });
     if (!prevUser) {
       return res.json({
         message: "Your email does not exists",
@@ -43,11 +43,11 @@ const handleOtpSending = async (req, res) => {
       const otpCode = Math.floor(Math.random() * 10000 + 1);
       const otpExpiryTime = new Date().getTime() + 300 * 1000;
       const responseData = verificationModel.create({
-        userEmail: email,
+        userEmail: userEmail,
         verificationCode: otpCode,
         expiresIn: otpExpiryTime,
       });
-      sendMail(email, otpCode);
+      sendMail(userEmail, otpCode);
       return res.json({
         message: "Check your email address",
         success: true,
@@ -64,10 +64,12 @@ const handleOtpSending = async (req, res) => {
 };
 
 const handleChangePassword = async (req, res) => {
-  const email = req.body.userEmail;
-  const code = req.body.verificationCode;
+  const { userEmail, verificationCode } = req.body;
   try {
-    const prevUser = await verificationModel.find({ email, code });
+    const prevUser = await verificationModel.find({
+      userEmail,
+      verificationCode,
+    });
     if (!prevUser) {
       return res.json({
         message: "No such user exists",
@@ -84,7 +86,7 @@ const handleChangePassword = async (req, res) => {
           success: false,
         });
       } else {
-        const currentUser = await authModel.findOne({ email });
+        const currentUser = await authModel.findOne({ userEmail });
         currentUser.userPassword = req.body.userPassword;
         currentUser.save();
         return res.json({

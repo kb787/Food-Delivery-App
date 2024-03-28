@@ -13,6 +13,7 @@ import imageDelivery from '../../images/imageDelivery.png';
 import imageLocation from '../../images/imageLocation.png';
 import foodItem from '../../images/foodItem.png';
 import itemCateg from '../../images/itemCateg.png';
+import {useNavigation} from '@react-navigation/native';
 const Homepage = () => {
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const fadeAnimCards = useRef(new Animated.Value(0)).current;
@@ -35,6 +36,12 @@ const Homepage = () => {
     fadeIn();
     fadeInCards();
   }, []);
+
+  const navigator = useNavigation();
+
+  const handleButtonClick = () => {
+    navigator.navigate('SignUp');
+  };
   return (
     <SafeAreaView style={styles.mainContainer}>
       <ScrollView>
@@ -74,7 +81,9 @@ const Homepage = () => {
             </View>
           </Animated.View>
           <View style={styles.buttonWrapping}>
-            <TouchableOpacity style={styles.buttonStyling}>
+            <TouchableOpacity
+              style={styles.buttonStyling}
+              onPress={handleButtonClick}>
               <Text style={styles.buttonTextStyling}>Explore More</Text>
             </TouchableOpacity>
           </View>
