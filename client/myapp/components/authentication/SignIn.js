@@ -32,6 +32,7 @@ const SignIn = () => {
       );
       if (postResponse.data.success) {
         Alert.alert('Sign-In Successfull');
+        navigation.navigate('MainProductScreen');
       } else {
         Alert.alert('Invalid credentials for the user');
       }
@@ -44,16 +45,19 @@ const SignIn = () => {
       <View style={styles.formContainer}>
         <Text style={styles.headingText}>Verify your Credentials here !</Text>
         <TextInput
+          keyboardType="email-address"
           style={styles.textInputStyling}
           value={userEmail}
           onChangeText={text => setUserEmail(text)}
           placeholder="Enter your email address"
         />
         <TextInput
+          type="password"
           style={styles.textInputStyling}
           value={userPassword}
           onChangeText={text => setUserPassword(text)}
           placeholder="Enter your password"
+          secureTextEntry={true}
         />
         <TouchableOpacity
           style={styles.textButtonOuterStyling}

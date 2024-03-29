@@ -13,6 +13,7 @@ const {
   otpSendingRouter,
   passwordChangingRouter,
 } = require("./verification-controllers");
+const { generalRouter } = require("./products-display-Controller");
 
 const react_native_server = process.env.native_server_link;
 const corsOptions = {
@@ -26,6 +27,7 @@ app.use(base_api_endpoint, signupRouter);
 app.use(base_api_endpoint, signinRouter);
 app.use(base_api_endpoint, otpSendingRouter);
 app.use(base_api_endpoint, passwordChangingRouter);
+app.use(base_api_endpoint, generalRouter);
 app.get("/", (req, res) => {
   res.json({ message: `Application launched successfully` });
 });

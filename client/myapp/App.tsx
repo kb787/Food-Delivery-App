@@ -23,6 +23,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import Homepage from './components/homescreen/Homepage';
 import SignUp from './components/authentication/SignUp';
 import SignIn from './components/authentication/SignIn';
+import MainProductScreen from './components/products-display/MainProductScreen';
 const Stack = createStackNavigator();
 
 type SectionProps = PropsWithChildren<{
@@ -68,6 +69,7 @@ function App(): React.JSX.Element {
         <Stack.Screen name="Homepage" component={Homepage} />
         <Stack.Screen name="SignUp" component={SignUp} />
         <Stack.Screen name="SignIn" component={SignIn} />
+        <Stack.Screen name="MainProductScreen" component={MainProductScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

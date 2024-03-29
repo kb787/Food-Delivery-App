@@ -49,22 +49,26 @@ const SignUp = () => {
           Create your account in simple steps !
         </Text>
         <TextInput
+          type="text"
           style={styles.textInputStyling}
           value={userName}
           onChangeText={text => setUserName(text)}
           placeholder="Enter your user name"
         />
         <TextInput
+          keyboardType="email-address"
           style={styles.textInputStyling}
           value={userEmail}
           onChangeText={text => setUserEmail(text)}
           placeholder="Enter your email address"
         />
         <TextInput
+          type="password"
           style={styles.textInputStyling}
           value={userPassword}
           onChangeText={text => setUserPassword(text)}
           placeholder="Enter your password"
+          secureTextEntry={true}
         />
         <TouchableOpacity
           style={styles.textButtonOuterStyling}
