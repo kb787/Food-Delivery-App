@@ -11,8 +11,18 @@ import {
   StyleSheet,
 } from 'react-native';
 
+import {useNavigation} from '@react-navigation/native';
+import {useCart} from '../booked-items/CartCreation';
+
 const ProductDataFetching = () => {
   const [data, setData] = useState([]);
+  const {addToCart} = useCart();
+  const navigation = useNavigation();
+
+  const handleCartButtonClick = item => {
+    addToCart(item);
+    navigation.navigate('CartDisplay');
+  };
 
   useEffect(() => {
     const handleFetchProductData = async () => {
@@ -78,7 +88,9 @@ const ProductDataFetching = () => {
             </Text>
           </View>
           <View style={styles.buttonWrapping}>
-            <TouchableOpacity style={styles.buttonStyling}>
+            <TouchableOpacity
+              style={styles.buttonStyling}
+              onPress={() => handleCartButtonClick(item)}>
               <Text style={styles.buttonTextStyling}>Add to Cart</Text>
             </TouchableOpacity>
           </View>

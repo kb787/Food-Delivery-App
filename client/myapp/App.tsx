@@ -24,6 +24,8 @@ import Homepage from './components/homescreen/Homepage';
 import SignUp from './components/authentication/SignUp';
 import SignIn from './components/authentication/SignIn';
 import MainProductScreen from './components/products-display/MainProductScreen';
+import CartDisplay from './components/booked-items/CartDisplay';
+import {CartProvider} from './components/booked-items/CartCreation';
 const Stack = createStackNavigator();
 
 type SectionProps = PropsWithChildren<{
@@ -64,14 +66,20 @@ function App(): React.JSX.Element {
   };
 
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="Homepage">
-        <Stack.Screen name="Homepage" component={Homepage} />
-        <Stack.Screen name="SignUp" component={SignUp} />
-        <Stack.Screen name="SignIn" component={SignIn} />
-        <Stack.Screen name="MainProductScreen" component={MainProductScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <CartProvider>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="Homepage">
+          <Stack.Screen name="Homepage" component={Homepage} />
+          <Stack.Screen name="SignUp" component={SignUp} />
+          <Stack.Screen name="SignIn" component={SignIn} />
+          <Stack.Screen
+            name="MainProductScreen"
+            component={MainProductScreen}
+          />
+          <Stack.Screen name="CartDisplay" component={CartDisplay} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </CartProvider>
   );
 }
 
