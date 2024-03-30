@@ -23,9 +23,7 @@ const ProductDataFetching = () => {
 
   const handleDataUpdate = ({categoryData, buttonClicked}) => {
     setButtonClicked(buttonClicked);
-    if (buttonClicked === true) {
-      setData(categoryData);
-    }
+    setData(categoryData);
   };
   const handleCartButtonClick = item => {
     addToCart(item);
@@ -59,7 +57,7 @@ const ProductDataFetching = () => {
     <SafeAreaView>
       <ScrollView>
         <NavbarProductPage onDataUpdate={handleDataUpdate} />
-        {data.map(item => (
+        {data?.map(item => (
           <View key={item._id} style={styles.cardStyling}>
             <View>
               <View>

@@ -32,34 +32,39 @@ const NavbarProductPage = ({onDataUpdate}) => {
     .map(key => key + '=' + filters[key])
     .join('&');
   const handleFilterButtonClick = async () => {
+    setButtonClicked(true);
     if (!productName && !productType && !productRate) {
       Alert.alert(
         `Entering any of the fields is mandatory for filter to be working`,
       );
+      return;
     }
-    setButtonClicked(true);
+    try {
+      let apiUrl = '';
+      if (buttonClicked === true) {
+        apiUrl = `http://192.168.79.116:3500/v1/api/product/display-category?${queryString}`;
+      } else {
+        apiUrl = 'http://192.168.79.116:3500/v1/api/product/display-all';
+      }
+      const response = await fetch(apiUrl);
+      if (!response.ok) {
+        throw new Error('Failed to fetch data');
+      }
+      const jsonResponse = await response.json();
+      if (Array.isArray(jsonResponse)) {
+        setCategoryData(jsonResponse);
+        setButtonClicked(true);
+      } else {
+        const convertedArray = await JSON.parse(jsonResponse);
+        setCategoryData(convertedArray);
+      }
+    } catch (error) {
+      Alert.alert('Error', error.message);
+    }
   };
   useEffect(() => {
-    const handleDisplayFilteredItems = async () => {
-      const response = await fetch(
-        `http://192.168.79.116:3500/v1/api/product/display-category?${queryString}`,
-      );
-      if (!response) {
-        Alert.alert('No data found with such categories');
-      } else {
-        const jsonResponse = await response.json();
-        if (Array.isArray(jsonResponse)) {
-          setCategoryData(jsonResponse);
-        } else {
-          Alert.alert('Data recieved is of invalid form');
-        }
-      }
-    };
-    handleDisplayFilteredItems();
-  }, []),
-    useEffect(() => {
-      onDataUpdate({categoryData, buttonClicked});
-    }, [categoryData, buttonClicked]);
+    onDataUpdate({categoryData, buttonClicked});
+  }, [categoryData, buttonClicked]);
   return (
     <View style={styles.navbarWrapping}>
       <View style={styles.itemCollection}>
@@ -122,7 +127,7 @@ const styles = StyleSheet.create({
     borderColor: 'white',
     borderWidth: 1,
     padding: 3,
-    borderRadius: 10,
+    borderRadius: 7,
     color: 'white',
   },
   navbarWrapping: {
