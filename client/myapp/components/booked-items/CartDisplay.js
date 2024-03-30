@@ -15,12 +15,14 @@ const CartDisplay = () => {
     <SafeAreaView>
       <ScrollView>
         <View>
-          <Text style={styles.contentHeading}>Cart Items</Text>
+          <View styles={styles.headingWrapping}>
+            <Text style={styles.contentHeading}>Cart Items</Text>
+          </View>
           {cart.length === 0 ? (
             <Text>Your cart is empty.</Text>
           ) : (
             cart?.map(item => (
-              <View key={item.id}>
+              <View key={item._id}>
                 <View style={styles.cardStyling}>
                   <View>
                     <View>
@@ -82,6 +84,10 @@ const styles = StyleSheet.create({
     borderColor: 'black',
     borderWidth: 1,
   },
+  headingWrapping: {
+    backgroundColor: 'rgb(194 65 12)',
+    padding: '2%',
+  },
   imageStyling: {
     width: 260,
     height: 160,
@@ -125,5 +131,7 @@ const styles = StyleSheet.create({
     fontSize: 25,
     padding: '4%',
     textAlign: 'center',
+    color: 'white',
+    backgroundColor: 'rgb(194 65 12)',
   },
 });

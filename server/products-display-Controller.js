@@ -1,4 +1,3 @@
-const { finished } = require("nodemailer/lib/xoauth2");
 const productModel = require("./products-model");
 
 const handleDisplayWithoutFilter = async (req, res) => {
@@ -36,35 +35,29 @@ const handleDisplayWithThreeFilters = async (req, res) => {
 
 const handleDisplayWithChoosenCriteria = async (req, res) => {
   try {
-    if (req.query.productDeliveryTime) {
-      const findResponse = await productModel.find({
-        deliveryTime: req.body.productDeliveryTime,
-      });
-      if (!findResponse) {
-        return res.json({ message: "No product found", status: 404 });
-      } else {
-        res.send(findResponse);
-      }
+    const { productRate, productType, productName } = req.query;
+    let filteredProducts;
+    const generalData = await productModel.find();
+    if (productRate) {
+      filteredProducts = generalData.filter(
+        ((product) => product.productRate < productRate) ||
+          ((product) => product.productRate === productRate)
+      );
     }
-    if (req.query.productDeliveryFee) {
-      const findResponse = await productModel.find({
-        deliveryFee: req.body.productDeliveryFee,
-      });
-      if (!findResponse) {
-        return res.json({ message: "No product found", status: 404 });
-      } else {
-        res.send(findResponse);
-      }
+    if (productType) {
+      filteredProducts = generalData.filter(
+        (product) => product.productType === productType
+      );
     }
-    if (req.query.productType) {
-      const findResponse = await productModel.find({
-        type: req.body.productType,
-      });
-      if (!findResponse) {
-        return res.json({ message: "No product found", status: 404 });
-      } else {
-        res.send(findResponse);
-      }
+    if (productName) {
+      filteredProducts = generalData.filter(
+        (product) => product.productName === productName
+      );
+    }
+    if (!filteredProducts) {
+      return res.json({ message: "No products found", status: 404 });
+    } else {
+      return res.send(filteredProducts);
     }
   } catch (error) {
     return res.json({
@@ -76,5 +69,13 @@ const handleDisplayWithChoosenCriteria = async (req, res) => {
 
 const express = require("express");
 const generalRouter = express.Router();
+const categoryRouter = express.Router();
 generalRouter.get("/product/display-all", handleDisplayWithoutFilter);
-module.exports = { generalRouter: generalRouter };
+categoryRouter.get(
+  "/product/display-category",
+  handleDisplayWithChoosenCriteria
+);
+module.exports = {
+  generalRouter: generalRouter,
+  categoryRouter: categoryRouter,
+};

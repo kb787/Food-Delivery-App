@@ -1,53 +1,104 @@
-import React, {useState} from 'react';
-import {StyleSheet, View, TouchableOpacity, Text} from 'react-native';
-import SectionedMultiSelect from 'react-native-sectioned-multi-select';
-import {MaterialIcons as Icon} from '@expo/vector-icons';
+import React, {useEffect, useState} from 'react';
+import {
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  Text,
+  TextInput,
+  Alert,
+} from 'react-native';
 
-const NavbarProductPage = () => {
-  const foodType = [
-    {name: 'Veg', id: 1},
-    {name: 'Non-Veg', id: 2},
-  ];
-  const deliveryTime = [
-    {name: '35-40', id: 1},
-    {name: '40-50', id: 2},
-    {name: '50-60', id: 3},
-  ];
-  const ratingType = [
-    {name: '50-150', id: 1},
-    {name: '150-300', id: 2},
-    {name: '300-500', id: 3},
-    {name: '500-600', id: 4},
-  ];
-  const [selectedFoodType, setSelectedFoodType] = useState('');
-  const [selectedDeliveryTime, setSelectedDeliveryTime] = useState('');
-  const [selectedRatingType, setSelectedRatingType] = useState('');
+const NavbarProductPage = ({onDataUpdate}) => {
+  const [productRate, setProductRate] = useState('');
+  const [productType, setProductType] = useState('');
+  const [productName, setProductName] = useState('');
+  const [categoryData, setCategoryData] = useState([]);
+  const [buttonClicked, setButtonClicked] = useState(false);
+  const filters = {};
+  const rate = productRate;
+  const type = productType;
+  const name = productName;
+
+  if (rate) {
+    filters.rate = rate;
+  }
+  if (type) {
+    filters.type = type;
+  }
+  if (name) {
+    filters.name = name;
+  }
+  const queryString = Object.keys(filters)
+    .map(key => key + '=' + filters[key])
+    .join('&');
+  const handleFilterButtonClick = async () => {
+    if (!productName && !productType && !productRate) {
+      Alert.alert(
+        `Entering any of the fields is mandatory for filter to be working`,
+      );
+    }
+    setButtonClicked(true);
+  };
+  useEffect(() => {
+    const handleDisplayFilteredItems = async () => {
+      const response = await fetch(
+        `http://192.168.79.116:3500/v1/api/product/display-category?${queryString}`,
+      );
+      if (!response) {
+        Alert.alert('No data found with such categories');
+      } else {
+        const jsonResponse = await response.json();
+        if (Array.isArray(jsonResponse)) {
+          setCategoryData(jsonResponse);
+        } else {
+          Alert.alert('Data recieved is of invalid form');
+        }
+      }
+    };
+    handleDisplayFilteredItems();
+  }, []),
+    useEffect(() => {
+      onDataUpdate({categoryData, buttonClicked});
+    }, [categoryData, buttonClicked]);
   return (
-    <View>
+    <View style={styles.navbarWrapping}>
       <View style={styles.itemCollection}>
-        <SectionedMultiSelect
-          items={foodType}
-          IconRenderer={Icon}
-          uniqueKey="id"
-          onSelectedItemsChange={setSelectedFoodType}
-          selectedItems={selectedFoodType}
-        />
-        <SectionedMultiSelect
-          items={deliveryTime}
-          IconRenderer={Icon}
-          uniqueKey="id"
-          onSelectedItemsChange={setSelectedDeliveryTime}
-          selectedItems={selectedDeliveryTime}
-        />
-        <SectionedMultiSelect
-          items={ratingType}
-          IconRenderer={Icon}
-          uniqueKey="id"
-          onSelectedItemsChange={setSelectedRatingType}
-          selectedItems={selectedRatingType}
-        />
-        <TouchableOpacity>
-          <Text>Apply Filters</Text>
+        <View>
+          <Text style={styles.outerTextStyling}>Rate</Text>
+          <TextInput
+            keyboardType="numeric"
+            value={productRate}
+            onChangeText={text => setProductRate(text)}
+            placeholder="100-300"
+            style={styles.textInputStyling}
+          />
+        </View>
+        <View>
+          <Text style={styles.outerTextStyling}>Category</Text>
+          <TextInput
+            type="text"
+            value={productType}
+            onChangeText={text => setProductType(text)}
+            placeholder="veg/non-veg"
+            style={styles.textInputStyling}
+          />
+        </View>
+        <View>
+          <Text style={styles.outerTextStyling}>Name</Text>
+          <TextInput
+            type="text"
+            value={productName}
+            onChangeText={text => setProductName(text)}
+            placeholder="Enter name"
+            style={styles.textInputStyling}
+          />
+        </View>
+        <TouchableOpacity style={styles.buttonOuterStyling}>
+          <Text
+            style={styles.buttonInnerStyling}
+            onPress={handleFilterButtonClick}>
+            Apply
+          </Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -60,6 +111,36 @@ const styles = StyleSheet.create({
   itemCollection: {
     display: 'flex',
     flexDirection: 'row',
-    gap: 2,
+    gap: 15,
+  },
+  outerTextStyling: {
+    textAlign: 'center',
+    color: 'white',
+    padding: 2,
+  },
+  textInputStyling: {
+    borderColor: 'white',
+    borderWidth: 1,
+    padding: 3,
+    borderRadius: 10,
+    color: 'white',
+  },
+  navbarWrapping: {
+    backgroundColor: 'rgb(194 65 12)',
+    color: 'white',
+    padding: '2%',
+  },
+  buttonOuterStyling: {
+    backgroundColor: 'rgb(59 130 246)',
+    color: 'white',
+    padding: 12,
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  buttonInnerStyling: {
+    color: 'white',
+    padding: 2,
+    fontSize: 15,
   },
 });

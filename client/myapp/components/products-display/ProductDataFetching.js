@@ -13,12 +13,20 @@ import {
 
 import {useNavigation} from '@react-navigation/native';
 import {useCart} from '../booked-items/CartCreation';
+import NavbarProductPage from './NavbarProductPage';
 
 const ProductDataFetching = () => {
   const [data, setData] = useState([]);
   const {addToCart} = useCart();
   const navigation = useNavigation();
+  const [buttonClicked, setButtonClicked] = useState(false);
 
+  const handleDataUpdate = ({categoryData, buttonClicked}) => {
+    setButtonClicked(buttonClicked);
+    if (buttonClicked === true) {
+      setData(categoryData);
+    }
+  };
   const handleCartButtonClick = item => {
     addToCart(item);
     navigation.navigate('CartDisplay');
@@ -47,57 +55,62 @@ const ProductDataFetching = () => {
     handleFetchProductData();
   }, []);
 
-  return data?.map(item => (
-    <View key={item._id}>
-      <View style={styles.cardStyling}>
-        <View>
-          <View>
-            <View style={styles.imageWrapping}>
-              <Image
-                source={{uri: item.productImageUrl}}
-                style={styles.imageStyling}
-              />
+  return (
+    <SafeAreaView>
+      <ScrollView>
+        <NavbarProductPage onDataUpdate={handleDataUpdate} />
+        {data.map(item => (
+          <View key={item._id} style={styles.cardStyling}>
+            <View>
+              <View>
+                <View style={styles.imageWrapping}>
+                  <Image
+                    source={{uri: item.productImageUrl}}
+                    style={styles.imageStyling}
+                  />
+                </View>
+                <Text style={styles.headingStyling}>{item.productName}</Text>
+                <Text style={styles.paragraphStyling}>
+                  Delivery Time :- {item.productDeliveryTime}
+                </Text>
+                <Text style={styles.paragraphStyling}>
+                  Delivery Charge :- ₹{item.productDeliveryFee}
+                </Text>
+                <Text style={styles.paragraphStyling}>₹{item.productRate}</Text>
+                <Text
+                  style={
+                    item.productType === 'veg'
+                      ? {
+                          display: 'flex',
+                          color: 'green',
+                          fontSize: 15,
+                          fontWeight: '400',
+                          padding: 1,
+                          width: 'auto',
+                        }
+                      : {
+                          color: 'red',
+                          fontSize: 15,
+                          fontWeight: '400',
+                          padding: 1,
+                        }
+                  }>
+                  {item.productType}
+                </Text>
+              </View>
+              <View style={styles.buttonWrapping}>
+                <TouchableOpacity
+                  style={styles.buttonStyling}
+                  onPress={() => handleCartButtonClick(item)}>
+                  <Text style={styles.buttonTextStyling}>Add to Cart</Text>
+                </TouchableOpacity>
+              </View>
             </View>
-            <Text style={styles.headingStyling}>{item.productName}</Text>
-            <Text style={styles.paragraphStyling}>
-              Delivery Time :- {item.productDeliveryTime}
-            </Text>
-            <Text style={styles.paragraphStyling}>
-              Delivery Charge :- ₹{item.productDeliveryFee}
-            </Text>
-            <Text style={styles.paragraphStyling}>₹{item.productRate}</Text>
-            <Text
-              style={
-                item.productType === 'veg'
-                  ? {
-                      display: 'flex',
-                      color: 'green',
-                      fontSize: 15,
-                      fontWeight: '400',
-                      padding: 1,
-                      width: 'auto',
-                    }
-                  : {
-                      color: 'red',
-                      fontSize: 15,
-                      fontWeight: '400',
-                      padding: 1,
-                    }
-              }>
-              {item.productType}
-            </Text>
           </View>
-          <View style={styles.buttonWrapping}>
-            <TouchableOpacity
-              style={styles.buttonStyling}
-              onPress={() => handleCartButtonClick(item)}>
-              <Text style={styles.buttonTextStyling}>Add to Cart</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </View>
-    </View>
-  ));
+        ))}
+      </ScrollView>
+    </SafeAreaView>
+  );
 };
 
 export default ProductDataFetching;
