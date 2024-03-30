@@ -8,14 +8,18 @@ Running The Project Instructions :-
 7. This runs the metro server at port no 8081
 8. In server folder create a file named as .env
 9. Use the above environment variables and save the .env file :-
-     express_server_port_no = "3500" 
+    
+     express_server_port_no = "3500"
+    
      mongodb_connection_string = "mongodb+srv://KaranBhanushali:Kb19092003%40@cluster0.fpqcnoe.mongodb.net/foodDeliveryApp"
+   
      base_api_endpoint = "/v1/api"
+   
      native_server_link = "http://192.168.79.116:8081"
      
-11. Here the 192.168.79.116 is WLAN IP-Address of my system so while using API ensure to replace the WLAN IP Address of your system
-12. In command prompt type the command ipconfig and copy the IPV4 Address provided in Wireless LAN Adapter
-13. Open another terminal in VS-Code and hit the command :- cd server
-14. This will take to server folder directory where package.json file of nodejs server is located
-15. In the above directory hit the command :- npm start
-16. Now Both Server Metro Server (React-Native) at port no 8081 and Node.js server at port no 3500 are started and API requests can be performed   
+10. Here the 192.168.79.116 is WLAN IP-Address of my system so while using API ensure to replace the WLAN IP Address of your system
+11. In command prompt type the command ipconfig and copy the IPV4 Address provided in Wireless LAN Adapter
+12. Open another terminal in VS-Code and hit the command :- cd server
+13. This will take to server folder directory where package.json file of nodejs server is located
+14. In the above directory hit the command :- npm start
+15. Now Both Server Metro Server (React-Native) at port no 8081 and Node.js server at port no 3500 are started and API requests can be performed   
