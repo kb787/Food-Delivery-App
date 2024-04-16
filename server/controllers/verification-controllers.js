@@ -1,5 +1,5 @@
-const verificationModel = require("./verification-model");
-const authModel = require("./auth-model");
+const verificationModel = require("../models/verification-model");
+const authModel = require("../models/auth-model");
 const nodemailer = require("nodemailer");
 const dotenv = require("dotenv");
 dotenv.config();

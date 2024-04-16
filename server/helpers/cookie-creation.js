@@ -1,4 +1,4 @@
-const cookieModel = require("./cookie-model");
+const cookieModel = require("../models/cookie-model");
 
 const handleCreateCookie = async (userName, userEmail) => {
   const cookieObject = await cookieModel.create({

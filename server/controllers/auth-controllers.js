@@ -1,6 +1,6 @@
-const authModel = require("./auth-model");
+const authModel = require("../models/auth-model");
 const bcryptjs = require("bcryptjs");
-const handleCreateCookie = require("./cookie-creation");
+const handleCreateCookie = require("../helpers/cookie-creation");
 
 const handleSignUp = async (req, res) => {
   const { userName, userEmail, userPassword } = req.body;

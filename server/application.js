@@ -8,15 +8,18 @@ dotenv.config();
 const express_port_no = process.env.express_server_port_no;
 const databaseConnection = require("./dbConfiguration");
 const base_api_endpoint = process.env.base_api_endpoint;
-const { signinRouter, signupRouter } = require("./auth-controllers");
+const {
+  signinRouter,
+  signupRouter,
+} = require("./controllers/auth-controllers");
 const {
   otpSendingRouter,
   passwordChangingRouter,
-} = require("./verification-controllers");
+} = require("./controllers/verification-controllers");
 const {
   generalRouter,
   categoryRouter,
-} = require("./products-display-Controller");
+} = require("./controllers/products-display-Controller");
 
 const react_native_server = process.env.native_server_link;
 const corsOptions = {

@@ -1,4 +1,4 @@
-const productModel = require("./products-model");
+const productModel = require("../models/products-model");
 
 const handleDisplayWithoutFilter = async (req, res) => {
   try {
