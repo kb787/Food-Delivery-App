@@ -11,7 +11,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@stripe/stripe-react-native": "^0.37.2",
     "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.2",
     "colors": "^1.4.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
@@ -20,6 +22,7 @@
     "mongoose": "^8.2.3",
     "nodemailer": "^6.9.13",
     "nodemon": "^3.1.0",
-    "passport": "^0.7.0"
+    "passport": "^0.7.0",
+    "stripe": "^15.1.0"
   }
 }

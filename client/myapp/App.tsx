@@ -24,8 +24,9 @@ import Homepage from './components/homescreen/Homepage';
 import SignUp from './components/authentication/SignUp';
 import SignIn from './components/authentication/SignIn';
 import MainProductScreen from './components/products-display/MainProductScreen';
-import CartDisplay from './components/booked-items/CartDisplay';
+import CartDisplay from './components/booked-items/CartDisplay.js';
 import {CartProvider} from './components/booked-items/CartCreation';
+import Stripepaymentgateway from './components/CheckoutScreen/Stripepaymentgateway.js';
 const Stack = createStackNavigator();
 
 type SectionProps = PropsWithChildren<{
@@ -68,10 +69,11 @@ function App(): React.JSX.Element {
   return (
     <CartProvider>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Homepage">
+        <Stack.Navigator initialRouteName="MainProductScreen">
           <Stack.Screen name="Homepage" component={Homepage} />
           <Stack.Screen name="SignUp" component={SignUp} />
           <Stack.Screen name="SignIn" component={SignIn} />
+          <Stack.Screen name="Stripepaymentgateway" component={Stripepaymentgateway} />
           <Stack.Screen
             name="MainProductScreen"
             component={MainProductScreen}

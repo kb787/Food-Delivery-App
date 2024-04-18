@@ -34,7 +34,7 @@ const ProductDataFetching = () => {
     const handleFetchProductData = async () => {
       try {
         let fetchResponse = await fetch(
-          'http://192.168.79.116:3500/v1/api/product/display-all',
+          'http://192.168.159.177:3500/v1/api/product/display-all',
         );
         if (!fetchResponse) {
           Alert.alert('No data found');

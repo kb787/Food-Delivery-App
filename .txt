@@ -1,0 +1,3 @@
+the application.js file has error while selecting the totalPrice variable error coming like it should be const 
+the u can check the client folder inside client/checkout i have created api for payment-sheet and inside CartDisplay there is one more api for sending the total price to application js and 
+it is not being send to payment-sheet api totalPrice
