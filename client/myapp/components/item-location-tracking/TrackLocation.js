@@ -1,17 +1,13 @@
 import {View, Text, StyleSheet, SafeAreaView, Alert} from 'react-native';
 import React, {useState, useEffect} from 'react';
-import MapBoxGL from '@react-native-mapbox-gl/maps';
 import env from '../../env';
+import Mapbox from '@rnmapbox/maps';
+Mapbox.setAccessToken(env.mapbox_access_token);
 
 const TrackLocation = () => {
   const [searchQueryPickup, setSearchQueryPickup] = useState('');
   const [searchQueryDrop, setSearchQueryDrop] = useState('');
   const [mapboxInitialized, setMapboxInitialized] = useState(false);
-
-  useEffect(() => {
-    MapBoxGL.setAccessToken(env.mapbox_access_token);
-    setMapboxInitialized(true);
-  }, []);
 
   const accessDirections = async data => {
     const convertedResponse = await data.json();
@@ -54,11 +50,9 @@ const TrackLocation = () => {
 
   return (
     <SafeAreaView style={{flex: 1}}>
-      {mapboxInitialized && (
-        <View style={{flex: 1}}>
-          <MapBoxGL.MapView style={{flex: 1}} />
-        </View>
-      )}
+      <View style={{flex: 1}}>
+        <Mapbox.MapView style={{flex: 1}} />
+      </View>
     </SafeAreaView>
   );
 };
