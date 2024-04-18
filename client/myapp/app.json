@@ -1,4 +1,16 @@
+
+
 {
   "name": "myapp",
-  "displayName": "myapp"
+  "displayName": "myapp",
+  "expo": {
+    "plugins": [
+      [
+        "@rnmapbox/maps",
+        {
+          "RNMapboxMapsDownloadToken": "pk.eyJ1Ijoia2I3ODciLCJhIjoiY2x2M3AxMDFkMDBjeDJqbzlhbnZ4NGFpZiJ9.iF1niEoVLFnZE_A5wGC4mw"
+        }
+      ]
+    ]
+  }
 }
