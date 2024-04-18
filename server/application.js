@@ -13,9 +13,9 @@ const {
   signupRouter,
 } = require("./controllers/auth-controllers");
 const {
-  otpSendingRouter,
-  passwordChangingRouter,
-} = require("./controllers/verification-controllers");
+  emailSendingRouter,
+  forgotPasswordRouter,
+} = require("./controllers/otp-verification-controller");
 const {
   generalRouter,
   categoryRouter,
@@ -31,8 +31,8 @@ app.use(express.json());
 app.use(cors(corsOptions));
 app.use(base_api_endpoint, signupRouter);
 app.use(base_api_endpoint, signinRouter);
-app.use(base_api_endpoint, otpSendingRouter);
-app.use(base_api_endpoint, passwordChangingRouter);
+app.use(base_api_endpoint, emailSendingRouter);
+app.use(base_api_endpoint, forgotPasswordRouter);
 app.use(base_api_endpoint, generalRouter);
 app.use(base_api_endpoint, categoryRouter);
 app.get("/", (req, res) => {
