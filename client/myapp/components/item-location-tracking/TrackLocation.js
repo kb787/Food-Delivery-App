@@ -1,8 +1,8 @@
 import {View, Text, StyleSheet, SafeAreaView, Alert} from 'react-native';
 import React, {useState, useEffect} from 'react';
 import env from '../../env';
-import Mapbox from '@rnmapbox/maps';
-Mapbox.setAccessToken(env.mapbox_access_token);
+// import Mapbox from '@rnmapbox/maps';
+// Mapbox.setAccessToken(env.mapbox_access_token);
 
 const TrackLocation = () => {
   const [searchQueryPickup, setSearchQueryPickup] = useState('');
@@ -51,7 +51,8 @@ const TrackLocation = () => {
   return (
     <SafeAreaView style={{flex: 1}}>
       <View style={{flex: 1}}>
-        <Mapbox.MapView style={{flex: 1}} />
+        {/* <Mapbox.MapView style={{flex: 1}} /> */}
+        Hello
       </View>
     </SafeAreaView>
   );

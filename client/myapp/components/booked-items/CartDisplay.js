@@ -46,7 +46,7 @@ const CartDisplay = () => {
                       </Text>
                       <Text
                         style={
-                          item.productType === 'veg'
+                          item.productType === 'Veg'
                             ? {
                                 display: 'flex',
                                 color: 'green',

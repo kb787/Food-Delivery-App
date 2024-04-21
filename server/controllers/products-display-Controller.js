@@ -49,18 +49,22 @@ const handleDisplayWithChoosenCriteria = async (req, res) => {
 };
 
 const handleSearching = async (req, res) => {
+  const { filters } = req.query;
   try {
-    const productAllTypes = ["veg", "non-veg"];
-    const productRate = req.query.productRate || 200;
-    const productType = req.query.productType || [...productAllTypes];
-    const productName = req.query.productName || "";
-    const searchResponse = await productModel.find({
-      productName: { $regex: productName },
-      $and: [
-        { productType: { $in: productType } },
-        { productRate: { $lt: productRate } },
-      ],
-    });
+    const productAllTypes = ["Veg", "Non-Veg"];
+    const productRate = req.query.filters.productRate || 200;
+    const productType = req.query.filters.productType || [...productAllTypes];
+    const productName = req.query.filters.productName || "";
+    const page = req.query.filters.page - 1 || 0;
+    const limit = 7;
+    const searchResponse = await productModel
+      .find({
+        productName: { $regex: productName },
+        $and: [{ productType: { $in: productType } }],
+        $and: [{ productRate: { $lt: productRate } }],
+      })
+      .skip(page * limit)
+      .limit(limit);
     res.json(searchResponse);
   } catch (error) {
     console.log(`Unable to process your request due to error ${error}`);
@@ -70,7 +74,7 @@ const handleSearching = async (req, res) => {
 const handlePagination = async (req, res) => {
   try {
     const page = req.query.page - 1 || 0;
-    const limit = req.query.limit || 6;
+    const limit = req.query.limit || 7;
 
     const paginatedResponse = await productModel
       .find()

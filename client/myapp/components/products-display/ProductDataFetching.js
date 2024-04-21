@@ -20,7 +20,11 @@ const ProductDataFetching = () => {
   const {addToCart} = useCart();
   const navigation = useNavigation();
   const [buttonClicked, setButtonClicked] = useState(false);
+  const [page, setPage] = useState(1);
 
+  const handleButtonPageClicked = pageNumber => {
+    setPage(pageNumber);
+  };
   const handleDataUpdate = ({categoryData, buttonClicked}) => {
     setButtonClicked(buttonClicked);
     setData(categoryData);
@@ -34,7 +38,7 @@ const ProductDataFetching = () => {
     const handleFetchProductData = async () => {
       try {
         let fetchResponse = await fetch(
-          'http://192.168.79.116:3500/v1/api/product/display-all',
+          `http://192.168.79.116:3500/v1/api/product/show-product?page=${page}`,
         );
         if (!fetchResponse) {
           Alert.alert('No data found');
@@ -77,7 +81,7 @@ const ProductDataFetching = () => {
                 <Text style={styles.paragraphStyling}>₹{item.productRate}</Text>
                 <Text
                   style={
-                    item.productType === 'veg'
+                    item.productType === 'Veg'
                       ? {
                           display: 'flex',
                           color: 'green',
@@ -106,6 +110,23 @@ const ProductDataFetching = () => {
             </View>
           </View>
         ))}
+        <View style={styles.pageButtonWrapping}>
+          <TouchableOpacity
+            style={styles.pageButtonOuterStyling}
+            onPress={() => handleButtonPageClicked(1)}>
+            <Text style={styles.pageButtonTextStyling}>1</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.pageButtonOuterStyling}
+            onPress={() => handleButtonPageClicked(2)}>
+            <Text style={styles.pageButtonTextStyling}>2</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.pageButtonOuterStyling}
+            onPress={() => handleButtonPageClicked(3)}>
+            <Text style={styles.pageButtonTextStyling}>3</Text>
+          </TouchableOpacity>
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -157,5 +178,27 @@ const styles = StyleSheet.create({
   buttonTextStyling: {
     color: 'white',
     fontSize: 16,
+  },
+  pageButtonWrapping: {
+    backgroundColor: 'rgb(194 65 12)',
+    flex: 1,
+    padding: 0,
+    margin: 0,
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  pageButtonOuterStyling: {
+    backgroundColor: '#f0f0f0',
+    padding: '5%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 8,
+    margin: '4%',
+  },
+  pageButtonTextStyling: {
+    color: 'black',
+    fontSize: 18,
   },
 });

@@ -40,11 +40,14 @@ const NavbarProductPage = ({onDataUpdate}) => {
       return;
     }
     try {
+      filters.productName = productName;
+      filters.productType = productType;
+      filters.productRate = productRate;
       let apiUrl = '';
       if (buttonClicked === true) {
-        apiUrl = `http://192.168.79.116:3500/v1/api/product/display-category?${queryString}`;
+        apiUrl = `http://192.168.79.116:3500/v1/api/product/search-product?${filters}`;
       } else {
-        apiUrl = 'http://192.168.79.116:3500/v1/api/product/display-all';
+        apiUrl = 'http://192.168.79.116:3500/v1/api/product/show-product';
       }
       const response = await fetch(apiUrl);
       if (!response.ok) {
@@ -84,7 +87,7 @@ const NavbarProductPage = ({onDataUpdate}) => {
             type="text"
             value={productType}
             onChangeText={text => setProductType(text)}
-            placeholder="veg/non-veg"
+            placeholder="Veg/Non-Veg"
             style={styles.textInputStyling}
           />
         </View>
