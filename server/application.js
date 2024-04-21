@@ -19,6 +19,8 @@ const {
 const {
   generalRouter,
   categoryRouter,
+  paginationRouter,
+  searchRouter,
 } = require("./controllers/products-display-Controller");
 
 const react_native_server = process.env.native_server_link;
@@ -35,6 +37,8 @@ app.use(base_api_endpoint, emailSendingRouter);
 app.use(base_api_endpoint, forgotPasswordRouter);
 app.use(base_api_endpoint, generalRouter);
 app.use(base_api_endpoint, categoryRouter);
+app.use(base_api_endpoint, paginationRouter);
+app.use(base_api_endpoint, searchRouter);
 app.get("/", (req, res) => {
   res.json({ message: `Application launched successfully` });
 });
