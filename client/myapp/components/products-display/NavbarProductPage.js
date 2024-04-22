@@ -45,9 +45,9 @@ const NavbarProductPage = ({onDataUpdate}) => {
       filters.productRate = productRate;
       let apiUrl = '';
       if (buttonClicked === true) {
-        apiUrl = `http://192.168.79.116:3500/v1/api/product/search-product?${filters}`;
+        apiUrl = `http://192.168.159.177:3500/v1/api/product/search-product?${filters}`;
       } else {
-        apiUrl = 'http://192.168.79.116:3500/v1/api/product/show-product';
+        apiUrl = 'http://192.168.159.177:3500/v1/api/product/show-product';
       }
       const response = await fetch(apiUrl);
       if (!response.ok) {

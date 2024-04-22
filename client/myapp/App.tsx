@@ -29,6 +29,8 @@ import {CartProvider} from './components/booked-items/CartCreation';
 import TrackLocation from './components/item-location-tracking/TrackLocation';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import env from './env';
+import Stripepaymentgateway from './components/CheckoutScreen/Stripepaymentgateway';
+import ForgotPasswordPage from './components/authentication/ForgotPasswordPage';
 const Stack = createStackNavigator();
 
 type SectionProps = PropsWithChildren<{
@@ -71,7 +73,7 @@ function App(): React.JSX.Element {
   return (
     <CartProvider>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Homepage">
+        <Stack.Navigator initialRouteName="SignIn">
           <Stack.Screen name="Homepage" component={Homepage} />
           <Stack.Screen name="SignUp" component={SignUp} />
           <Stack.Screen name="SignIn" component={SignIn} />
@@ -81,6 +83,8 @@ function App(): React.JSX.Element {
           />
           <Stack.Screen name="CartDisplay" component={CartDisplay} />
           <Stack.Screen name="TrackLocation" component={TrackLocation} />
+          <Stack.Screen name="Stripepaymentgateway" component={Stripepaymentgateway} />
+          <Stack.Screen name="ForgotPasswordPage" component={ForgotPasswordPage} />
         </Stack.Navigator>
       </NavigationContainer>
     </CartProvider>
