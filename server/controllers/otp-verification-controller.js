@@ -11,9 +11,9 @@ const resend_object = new Resend(resend_key);
 
 const handleForgotPassword = async (req, res) => {
   try {
-    const { recieverEmail, verificationCode } = req.body;
+    const { userEmail, verificationCode } = req.body;
     const oldUser = await verificationModel.findOne({
-      recieverEmail,
+      userEmail,
       verificationCode,
     });
     if (!oldUser) {
@@ -58,9 +58,10 @@ const handleForgotPassword = async (req, res) => {
   }
 };
 
-const handleEmailSending = async (email) => {
+const handleEmailSending = async (req, res) => {
+  const { userEmail } = req.body;
   try {
-    const validUser = await authModel.findOne({ userEmail });
+    const validUser = authModel.find({ userEmail });
     if (!validUser) {
       return res.json({
         message: "Your account does not exists do the authentication",
