@@ -2,12 +2,18 @@ const { Resend } = require("resend");
 const dotenv = require("dotenv");
 const verificationModel = require("../models/verification-model");
 const authModel = require("../models/auth-model");
+const nodemailer = require("nodemailer");
 
 dotenv.config();
 
 const sender_email = process.env.my_email;
+const sender_app_password = process.env.app_password;
 const resend_key = process.env.resend_api_key;
+const nodemailer_host = process.env.nodemailer_host;
 const resend_object = new Resend(resend_key);
+const nodemailer_port = process.env.nodemailer_port;
+const email_host = process.env.email_host;
+const sender_account_password = process.env.my_account_password;
 
 const handleForgotPassword = async (req, res) => {
   try {
@@ -76,12 +82,31 @@ const handleEmailSending = async (req, res) => {
       verificationCode: passcodeGenerate,
       expiresIn: otpExpiryTime,
     });
-    resend_object.emails.send({
+    const transporter = nodemailer.createTransport({
+      // host: nodemailer_host,
+      host: email_host,
+      port: nodemailer_port,
+      secure: false,
+      auth: {
+        user: sender_email,
+        pass: sender_app_password,
+      },
+    });
+
+    await transporter.sendMail({
       from: sender_email,
       to: userEmail,
       subject: `OTP for password change`,
+      text: `Do not disclose this otp password with anyone`,
       html: `The passcode for changing OTP is ${passcodeGenerate}`,
     });
+    // resend_object.emails.send({
+    //   from: sender_email,
+    //   to: userEmail,
+    //   subject: `OTP for password change`,
+    //   html:`The passcode for changing OTP is ${passcodeGenerate}` ,
+    // });
+
     return res.json({
       message: "Sent email successfully",
       status: 201,
