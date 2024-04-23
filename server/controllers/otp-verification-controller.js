@@ -103,13 +103,6 @@ const handleEmailSending = async (req, res) => {
       text: `Do not disclose this otp password with anyone`,
       html: `The passcode for changing OTP is ${passcodeGenerate}`,
     });
-    // resend_object.emails.send({
-    //   from: sender_email,
-    //   to: userEmail,
-    //   subject: `OTP for password change`,
-    //   html:`The passcode for changing OTP is ${passcodeGenerate}` ,
-    // });
-
     return res.json({
       message: "Sent email successfully",
       status: 201,

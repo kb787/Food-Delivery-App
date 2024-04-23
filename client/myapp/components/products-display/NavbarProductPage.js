@@ -40,12 +40,9 @@ const NavbarProductPage = ({onDataUpdate}) => {
       return;
     }
     try {
-      filters.productName = productName;
-      filters.productType = productType;
-      filters.productRate = productRate;
       let apiUrl = '';
       if (buttonClicked === true) {
-        apiUrl = `http://192.168.79.116:3500/v1/api/product/search-product?${filters}`;
+        apiUrl = `http://192.168.79.116:3500/v1/api/product/search-product?productName=${productName}&&productType=${productType}&&productRate=${productRate}`;
       } else {
         apiUrl = 'http://192.168.79.116:3500/v1/api/product/show-product';
       }
