@@ -61,7 +61,7 @@ const handleForgotPassword = async (req, res) => {
 const handleEmailSending = async (req, res) => {
   const { userEmail } = req.body;
   try {
-    const validUser = authModel.find({ userEmail });
+    const validUser = authModel.findOne({ userEmail });
     if (!validUser) {
       return res.json({
         message: "Your account does not exists do the authentication",
