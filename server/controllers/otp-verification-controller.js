@@ -3,6 +3,7 @@ const dotenv = require("dotenv");
 const verificationModel = require("../models/verification-model");
 const authModel = require("../models/auth-model");
 const nodemailer = require("nodemailer");
+const bcryptjs = require("bcryptjs");
 
 dotenv.config();
 
@@ -46,7 +47,9 @@ const handleForgotPassword = async (req, res) => {
             success: false,
           });
         }
-        prevUser.userPassword = req.body.userPassword;
+        const salt = await bcryptjs.genSalt(10);
+        const hashedPassword = await bcryptjs.hash(req.body.userPassword, salt);
+        prevUser.userPassword = hashedPassword;
         await prevUser.save();
         return res.json({
           message: "Password changed successfully",
