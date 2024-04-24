@@ -24,7 +24,7 @@ const SignIn = () => {
     }
     try {
       const postResponse = await axios.post(
-        'http://192.168.79.116:3500/v1/api/auth/signin-user ',
+        'http://192.168.159.177:3500/v1/api/auth/signin-user ',
         {
           userEmail: userEmail,
           userPassword: userPassword,
@@ -66,6 +66,9 @@ const SignIn = () => {
         </TouchableOpacity>
         <Link to={{screen: 'SignUp'}} style={styles.bottomTextStyling}>
           Not having an account Sign Up Here !
+        </Link>
+        <Link to={{screen: 'ForgotPasswordPage'}} style={styles.bottomTextStyling}>
+          Forgot Password ?
         </Link>
       </View>
     </SafeAreaView>

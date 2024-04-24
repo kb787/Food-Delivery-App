@@ -43,6 +43,7 @@ const NavbarProductPage = ({onDataUpdate}) => {
       let apiUrl = '';
       if (buttonClicked === true) {
         apiUrl = `http://192.168.159.177:3500/v1/api/product/search-product?productName=${productName}&productType=${productType}&productRate=${productRate}`;
+        apiUrl = `http://192.168.159.177:3500/v1/api/product/search-product?${filters}`;
       } else {
         apiUrl = 'http://192.168.159.177:3500/v1/api/product/show-product';
       }
