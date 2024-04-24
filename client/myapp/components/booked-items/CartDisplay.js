@@ -1,6 +1,6 @@
 import React from 'react';
 import {useCart} from './CartCreation';
-import { useState,useEffect } from 'react';
+import {useState, useEffect} from 'react';
 import Stripepaymentgateway from '../CheckoutScreen/Stripepaymentgateway';
 import {
   View,
@@ -13,19 +13,19 @@ import {
 
 const CartDisplay = () => {
   const [loading, setLoading] = useState(false);
-  const { cart } = useCart();
+  const {cart} = useCart();
   const calculateTotalPrice = () => {
     let totalPrice = 0;
     cart.forEach(item => {
       totalPrice += item.productRate + item.productDeliveryFee;
     });
-    return totalPrice
+    return totalPrice;
   };
   const handleCheckout = async () => {
     setLoading(true);
 
     try {
-      const response = await fetch('http://192.168.159.177:3500/api/checkout', {
+      const response = await fetch('http://192.168.79.116:3500/api/checkout', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -52,69 +52,69 @@ const CartDisplay = () => {
   };
 
   useEffect(() => {
-    handleCheckout(); // This will run handleCheckout automatically on component mount or update
-  }, []); // Empty dependency array ensures it runs only once
+    handleCheckout();
+  }, []);
 
   return (
     <SafeAreaView>
-    <ScrollView>
-      <View>
-        <View style={styles.headingWrapping}>
-          <Text style={styles.contentHeading}>Cart Items</Text>
-        </View>
-        {cart.length === 0 ? (
-          <Text>Your cart is empty.</Text>
-        ) : (
-          cart.map(item => (
-            <View key={item._id}>
-              <View style={styles.cardStyling}>
-                <View>
+      <ScrollView>
+        <View>
+          <View style={styles.headingWrapping}>
+            <Text style={styles.contentHeading}>Cart Items</Text>
+          </View>
+          {cart.length === 0 ? (
+            <Text>Your cart is empty.</Text>
+          ) : (
+            cart.map(item => (
+              <View key={item._id}>
+                <View style={styles.cardStyling}>
                   <View>
-                    <View style={styles.imageWrapping}>
-                      <Image
-                        source={{ uri: item.productImageUrl }}
-                        style={styles.imageStyling}
-                      />
+                    <View>
+                      <View style={styles.imageWrapping}>
+                        <Image
+                          source={{uri: item.productImageUrl}}
+                          style={styles.imageStyling}
+                        />
+                      </View>
+                      <Text style={styles.headingStyling}>
+                        {item.productName}
+                      </Text>
+                      <Text style={styles.paragraphStyling}>
+                        Delivery Time: {item.productDeliveryTime}
+                      </Text>
+                      <Text style={styles.paragraphStyling}>
+                        Delivery Charge: ₹{item.productDeliveryFee}
+                      </Text>
+                      <Text style={styles.paragraphStyling}>
+                        ₹{item.productRate}
+                      </Text>
+                      <Text
+                        style={{
+                          color: item.productType === 'Veg' ? 'green' : 'red',
+                          fontSize: 15,
+                          fontWeight: '400',
+                          padding: 1,
+                        }}>
+                        {item.productType}
+                      </Text>
                     </View>
-                    <Text style={styles.headingStyling}>
-                      {item.productName}
-                    </Text>
-                    <Text style={styles.paragraphStyling}>
-                      Delivery Time: {item.productDeliveryTime}
-                    </Text>
-                    <Text style={styles.paragraphStyling}>
-                      Delivery Charge: ₹{item.productDeliveryFee}
-                    </Text>
-                    <Text style={styles.paragraphStyling}>
-                      ₹{item.productRate}
-                    </Text>
-                    <Text
-                      style={{
-                        color: item.productType === 'veg' ? 'green' : 'red',
-                        fontSize: 15,
-                        fontWeight: '400',
-                        padding: 1,
-                      }}>
-                      {item.productType}
-                    </Text>
                   </View>
                 </View>
               </View>
-            </View>
-          ))
-        )}
-        {cart.length > 0 && (
-          <React.Fragment>
-            <Text style={styles.totalPriceText}>
-              Total Price: ₹{calculateTotalPrice()}
-            </Text>
-            <Stripepaymentgateway />
-          </React.Fragment>
-        )}
-      </View>
-    </ScrollView>
-  </SafeAreaView>
-);
+            ))
+          )}
+          {cart.length > 0 && (
+            <React.Fragment>
+              <Text style={styles.totalPriceText}>
+                Total Price: ₹{calculateTotalPrice()}
+              </Text>
+              <Stripepaymentgateway />
+            </React.Fragment>
+          )}
+        </View>
+      </ScrollView>
+    </SafeAreaView>
+  );
 };
 export default CartDisplay;
 
@@ -173,5 +173,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: 'white',
     backgroundColor: 'rgb(194 65 12)',
+  },
+  totalPriceText: {
+    margin: '2%',
+    fontSize: 18,
   },
 });

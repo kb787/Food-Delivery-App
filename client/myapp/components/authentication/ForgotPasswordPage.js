@@ -1,9 +1,12 @@
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
-import axios from 'axios';
-import { useState } from 'react';
 import {useNavigation} from '@react-navigation/native';
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import React, {useState} from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+} from 'react-native';
 import axios from 'axios';
 
 const ForgotPasswordPage = () => {
@@ -21,10 +24,13 @@ const ForgotPasswordPage = () => {
         setSuccess(false);
         return;
       }
-      const response = await axios.post('http://192.168.159.177:3500/v1/api/verification/change-password', {
-        verificationCode: verificationCode,
-        userPassword: newPassword,
-      });
+      const response = await axios.post(
+        'http://192.168.79.116:3500/v1/api/verification/change-password',
+        {
+          verificationCode: verificationCode,
+          userPassword: newPassword,
+        },
+      );
       if (response.data.success) {
         setMessage(response.data.message);
         setSuccess(true);
@@ -63,14 +69,17 @@ const ForgotPasswordPage = () => {
         onChangeText={setConfirmPassword}
         secureTextEntry={true}
       />
-      
+
       <TouchableOpacity
-        style={[styles.button, { backgroundColor: 'rgb(194, 65, 12)' }]}
-        onPress={handleForgotPassword}
-      >
+        style={[styles.button, {backgroundColor: 'rgb(194, 65, 12)'}]}
+        onPress={handleForgotPassword}>
         <Text style={styles.buttonText}>Reset Password</Text>
       </TouchableOpacity>
-      {message ? <Text style={[styles.message, { color: success ? 'green' : 'red' }]}>{message}</Text> : null}
+      {message ? (
+        <Text style={[styles.message, {color: success ? 'green' : 'red'}]}>
+          {message}
+        </Text>
+      ) : null}
     </View>
   );
 };

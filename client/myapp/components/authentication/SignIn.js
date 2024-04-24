@@ -23,18 +23,20 @@ const SignIn = () => {
 
   const handleEmailSending = async () => {
     if (!userEmail) {
-      Alert.alert("Entering User Email is Mandatory");
+      Alert.alert('Entering User Email is Mandatory');
       return;
     }
     try {
-      const response = await axios.post('http://192.168.159.177:3500/v1/api/verification/send-email', {
-        userEmail: userEmail, // Use userEmail instead of email
-      });
-      console.log('Response:', response); 
+      const response = await axios.post(
+        'http://192.168.79.116:3500/v1/api/verification/send-email',
+        {
+          userEmail: userEmail,
+        },
+      );
       setSuccess(true);
-      navigation.navigate('ForgotPasswordPage'); // Navigate to ForgotPasswordPage on success
+      navigation.navigate('ForgotPasswordPage');
     } catch (error) {
-      console.error('Error:', error.response); 
+      console.error('Error:', error.response);
       setMessage('Unable to process your request due to an error');
       setSuccess(false);
     }
@@ -45,7 +47,7 @@ const SignIn = () => {
     }
     try {
       const postResponse = await axios.post(
-        'http://192.168.159.177:3500/v1/api/auth/signin-user ',
+        'http://192.168.79.116:3500/v1/api/auth/signin-user ',
         {
           userEmail: userEmail,
           userPassword: userPassword,
