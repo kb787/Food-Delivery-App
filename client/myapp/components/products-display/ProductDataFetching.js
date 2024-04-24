@@ -25,15 +25,6 @@ const ProductDataFetching = () => {
   const handleButtonPageClicked = pageNumber => {
     setPage(pageNumber);
   };
-  const handleDataUpdate = ({categoryData, buttonClicked}) => {
-    setButtonClicked(buttonClicked);
-    setData(categoryData);
-  };
-  const handleCartButtonClick = item => {
-    addToCart(item);
-    navigation.navigate('CartDisplay');
-  };
-
   useEffect(() => {
     const handleFetchProductData = async () => {
       try {
