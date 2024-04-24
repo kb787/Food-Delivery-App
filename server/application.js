@@ -4,6 +4,7 @@ const http = require("http");
 const server = http.createServer(app);
 const dotenv = require("dotenv");
 const cors = require("cors");
+const bodyParser = require("body-parser")
 dotenv.config();
 const express_port_no = process.env.express_server_port_no;
 const databaseConnection = require("./dbConfiguration");
@@ -27,6 +28,48 @@ const react_native_server = process.env.native_server_link;
 const corsOptions = {
   origin: react_native_server,
 };
+
+const stripe = require('stripe')('sk_test_51P4kp7SFBQGHHDjpMEODbIwOZnhYg9CqFiXOwn6Y2A15zJqoyOzUKoTEVSNgnf93crfgeFLODapXZQ1abR3GtbD500LKTwZcRt');
+app.use(bodyParser.json());
+let orders = [];
+let totalPriceForPaymentSheet=0;
+
+app.post('/api/checkout', (req, res) => {
+  const { cart, totalPrice } = req.body;
+  console.log('Received cart:', cart);
+  console.log('Total Price:', totalPrice);
+  totalPriceForPaymentSheet = totalPrice;
+  orders.push({ cart, totalPrice });
+  res.status(200).json({ message: 'Checkout successful!', totalPrice });
+});
+
+app.post('/payment-sheet', async (req, res) => {
+  try {
+    const customer = await stripe.customers.create();
+    const ephemeralKey = await stripe.ephemeralKeys.create(
+      { customer: customer.id },
+      { apiVersion: '2024-04-10' }
+    );
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: totalPriceForPaymentSheet * 100,
+      currency: 'inr',
+      customer: customer.id,
+      description: 'Test payment for developer',
+      automatic_payment_methods: {
+        enabled: true,
+      },
+    });
+    res.json({
+      paymentIntent: paymentIntent.client_secret,
+      ephemeralKey: ephemeralKey.secret,
+      customer: customer.id,
+      publishableKey: 'pk_test_51P4kp7SFBQGHHDjpGBS7WDXJBjHJemvx3KBrMwHoU8oZ1gehjcaSo4kzYyljMSEgwtRtWomWgZcWnDRyvTrBeejo00zLeCloYG',
+    });
+  } catch (error) {
+    console.error('Error during payment:', error);
+    res.status(400).json({ error: error.message });
+  }
+});
 
 databaseConnection();
 app.use(express.json());
