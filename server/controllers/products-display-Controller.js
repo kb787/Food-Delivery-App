@@ -52,27 +52,22 @@ const handleSearching = async (req, res) => {
   const { productName, productRate, productType, page } = req.query;
   try {
     const productAllTypes = ["Veg", "Non-Veg"];
-    const productRateFilter = req.query.productRate || 500;
-    const productTypeFilter = req.query.productType || [...productAllTypes];
-    const productNameFilter = req.query.productName || "";
-    // const searchResponse = await productModel.find({
-    //   productName: { $regex: productNameFilter, $options: 'i'  },
-    //   $and: [
-    //     { productType: { $in: productTypeFilter } },
-    //     { productRate: { $lt: productRateFilter } },
-    //   ],
-    // });
+    const productRateFilter = productRate || 500;
+    const productTypeFilter = productType || [...productAllTypes];
+    const productNameFilter = productName || "";
     const page = req.query.page - 1 || 0;
-    const limit = 7;
+    const limit = 12;
+
     const searchResponse = await productModel
       .find({
-        productName: { $regex: productNameFilter, $options: "i" },
-        $and: [{ productType: { $in: productTypeFilter } }],
-        $and: [{ productRate: { $lt: productRateFilter } }],
+        $and: [
+          ({ productName: { $regex: productNameFilter, $options: "i" } },
+          { productType: { $in: productAllTypes } },
+          { productRate: { $lt: productRateFilter } }),
+        ],
       })
       .skip(page * limit)
       .limit(limit);
-
     return res.json(searchResponse);
   } catch (error) {
     console.log(`Unable to process your request due to error ${error}`);
