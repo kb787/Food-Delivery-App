@@ -1,4 +1,4 @@
-import {View, Text, StyleSheet, SafeAreaView, Alert} from 'react-native';
+/*import {View, Text, StyleSheet, SafeAreaView, Alert} from 'react-native';
 import React, {useState, useEffect} from 'react';
 import env from '../../env';
 // import Mapbox from '@rnmapbox/maps';
@@ -51,11 +51,11 @@ const TrackLocation = () => {
   return (
     <SafeAreaView style={{flex: 1}}>
       <View style={{flex: 1}}>
-        {/* <Mapbox.MapView style={{flex: 1}} /> */}
+        { <Mapbox.MapView style={{flex: 1}} /> }
         Hello
       </View>
     </SafeAreaView>
   );
 };
 
-export default TrackLocation;
+export default TrackLocation;*/

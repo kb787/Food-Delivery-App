@@ -26,7 +26,6 @@ import SignIn from './components/authentication/SignIn';
 import MainProductScreen from './components/products-display/MainProductScreen';
 import CartDisplay from './components/booked-items/CartDisplay';
 import {CartProvider} from './components/booked-items/CartCreation';
-import TrackLocation from './components/item-location-tracking/TrackLocation';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import env from './env';
 const Stack = createStackNavigator();
@@ -71,7 +70,7 @@ function App(): React.JSX.Element {
   return (
     <CartProvider>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Homepage">
+        <Stack.Navigator initialRouteName="MainProductScreen">
           <Stack.Screen name="Homepage" component={Homepage} />
           <Stack.Screen name="SignUp" component={SignUp} />
           <Stack.Screen name="SignIn" component={SignIn} />
@@ -80,7 +79,6 @@ function App(): React.JSX.Element {
             component={MainProductScreen}
           />
           <Stack.Screen name="CartDisplay" component={CartDisplay} />
-          <Stack.Screen name="TrackLocation" component={TrackLocation} />
         </Stack.Navigator>
       </NavigationContainer>
     </CartProvider>
