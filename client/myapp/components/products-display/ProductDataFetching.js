@@ -25,28 +25,37 @@ const ProductDataFetching = () => {
   const handleButtonPageClicked = pageNumber => {
     setPage(pageNumber);
   };
-  useEffect(() => {
-    const handleFetchProductData = async () => {
-      try {
-        let fetchResponse = await fetch(
-          `http://192.168.159.177:3500/v1/api/product/show-product?page=${page}`,
-        );
-        if (!fetchResponse) {
-          Alert.alert('No data found');
+  const handleFetchProductData = async page => {
+    try {
+      let fetchResponse = await fetch(
+        `http://192.168.159.177:3500/v1/api/product/show-product?page=${page}`,
+      );
+      if (!fetchResponse) {
+        Alert.alert('No data found');
+      } else {
+        const jsonData = await fetchResponse.json();
+        if (Array.isArray(jsonData)) {
+          setData(jsonData);
         } else {
-          const jsonData = await fetchResponse.json();
-          if (Array.isArray(jsonData)) {
-            setData(jsonData);
-          } else {
-            Alert.alert('Response is in invalid form');
-          }
+          Alert.alert('Response is in invalid form');
         }
-      } catch (error) {
-        Alert.alert(`Unable to fetch data due to ${error} occured`);
       }
-    };
-    handleFetchProductData();
-  }, []);
+    } catch (error) {
+      Alert.alert(`Unable to fetch data due to ${error} occured`);
+    }
+  };
+  useEffect(() => {
+    handleFetchProductData(page);
+  }, [page]);
+
+  const handleDataUpdate = ({categoryData, buttonClicked}) => {
+    setButtonClicked(buttonClicked);
+    setData(categoryData);
+  };
+  const handleCartButtonClick = item => {
+    addToCart(item);
+    navigation.navigate('CartDisplay');
+  };
 
   return (
     <SafeAreaView>

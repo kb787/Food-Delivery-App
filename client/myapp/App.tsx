@@ -28,6 +28,7 @@ import CartDisplay from './components/booked-items/CartDisplay';
 import {CartProvider} from './components/booked-items/CartCreation';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import env from './env';
+import ForgotPasswordPage from './components/authentication/ForgotPasswordPage';
 const Stack = createStackNavigator();
 
 type SectionProps = PropsWithChildren<{
@@ -70,7 +71,7 @@ function App(): React.JSX.Element {
   return (
     <CartProvider>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Homepage">
+        <Stack.Navigator initialRouteName="ForgotPasswordPage">
           <Stack.Screen name="Homepage" component={Homepage} />
           <Stack.Screen name="SignUp" component={SignUp} />
           <Stack.Screen name="SignIn" component={SignIn} />
@@ -79,6 +80,7 @@ function App(): React.JSX.Element {
             component={MainProductScreen}
           />
           <Stack.Screen name="CartDisplay" component={CartDisplay} />
+          <Stack.Screen name="ForgotPasswordPage" component={ForgotPasswordPage} />
         </Stack.Navigator>
       </NavigationContainer>
     </CartProvider>

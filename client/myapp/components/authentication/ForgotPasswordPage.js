@@ -1,38 +1,34 @@
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import axios from 'axios';
+import { useState } from 'react';
+import {useNavigation} from '@react-navigation/native';
+import React, { useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import axios from 'axios';
 
 const ForgotPasswordPage = () => {
-  const [email, setEmail] = useState('');
   const [verificationCode, setVerificationCode] = useState('');
   const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [message, setMessage] = useState('');
   const [success, setSuccess] = useState(false);
-
-  const handleEmailSending = async () => {
-    try {
-      const response = await axios.post('http://192.168.159.177:3500/verification/send-email', {
-        userEmail: email,
-      });
-      console.log('Response:', response); // Log the entire response for debugging
-      // Handle success response
-    } catch (error) {
-      console.error('Error:', error.response); // Log the error response for debugging
-      setMessage('Unable to process your request due to an error');
-      setSuccess(false);
-    }
-  };
-  
+  const navigation = useNavigation();
 
   const handleForgotPassword = async () => {
     try {
-      const response = await axios.post('http://192.168.159.177:3500/verification/change-password', {
-        recieverEmail: email,
+      if (newPassword !== confirmPassword) {
+        setMessage('Passwords do not match.');
+        setSuccess(false);
+        return;
+      }
+      const response = await axios.post('http://192.168.159.177:3500/v1/api/verification/change-password', {
         verificationCode: verificationCode,
         userPassword: newPassword,
       });
       if (response.data.success) {
         setMessage(response.data.message);
         setSuccess(true);
+        navigation.navigate('MainProductScreen');
       } else {
         setMessage(response.data.message);
         setSuccess(false);
@@ -49,18 +45,6 @@ const ForgotPasswordPage = () => {
       <Text style={styles.title}>Forgot Password</Text>
       <TextInput
         style={styles.input}
-        placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
-      />
-      <TouchableOpacity
-        style={[styles.button, { backgroundColor: 'rgb(194, 65, 12)' }]}
-        onPress={handleEmailSending}
-      >
-        <Text style={styles.buttonText}>Send Verification Email</Text>
-      </TouchableOpacity>
-      <TextInput
-        style={styles.input}
         placeholder="Verification Code"
         value={verificationCode}
         onChangeText={setVerificationCode}
@@ -70,7 +54,16 @@ const ForgotPasswordPage = () => {
         placeholder="New Password"
         value={newPassword}
         onChangeText={setNewPassword}
+        secureTextEntry={true}
       />
+      <TextInput
+        style={styles.input}
+        placeholder="Confirm Password"
+        value={confirmPassword}
+        onChangeText={setConfirmPassword}
+        secureTextEntry={true}
+      />
+      
       <TouchableOpacity
         style={[styles.button, { backgroundColor: 'rgb(194, 65, 12)' }]}
         onPress={handleForgotPassword}
