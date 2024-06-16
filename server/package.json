@@ -4,7 +4,7 @@
   "description": "",
   "main": "application.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "start": "nodemon application.js",
     "build": "node application.js"
   },
@@ -23,5 +23,8 @@
     "nodemon": "^3.1.0",
     "passport": "^0.7.0",
     "resend": "^3.2.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
   }
 }
