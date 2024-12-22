@@ -70,7 +70,7 @@ function App(): React.JSX.Element {
   return (
     <CartProvider>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="TrackLocation">
+        <Stack.Navigator initialRouteName="Homepage">
           <Stack.Screen name="Homepage" component={Homepage} />
           <Stack.Screen name="SignUp" component={SignUp} />
           <Stack.Screen name="SignIn" component={SignIn} />

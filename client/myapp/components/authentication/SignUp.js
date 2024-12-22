@@ -25,7 +25,7 @@ const SignUp = () => {
     }
     try {
       const registerResponse = await axios.post(
-        'http://192.168.79.116:3500/v1/api/auth/signup-user',
+        'http://192.168.209.116:3500/v1/api/auth/signup-user',
         {
           userName: userName,
           userEmail: userEmail,

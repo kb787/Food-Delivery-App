@@ -6,7 +6,6 @@ const MainProductScreen = () => {
     <SafeAreaView>
       <ScrollView>
         <View>
-          {/* <NavbarProductPage /> */}
           <ProductDataFetching />
         </View>
       </ScrollView>
