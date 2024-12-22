@@ -12,12 +12,35 @@ import React from 'react';
 import {useState} from 'react';
 import {Link, useNavigation} from '@react-navigation/native';
 import axios from 'axios';
+import ForgotPasswordPage from './ForgotPasswordPage';
 
 const SignIn = () => {
   const [userEmail, setUserEmail] = useState('');
   const [userPassword, setUserPassword] = useState('');
   const navigation = useNavigation();
+  const [message, setMessage] = useState('');
+  const [success, setSuccess] = useState(false);
 
+  const handleEmailSending = async () => {
+    if (!userEmail) {
+      Alert.alert('Entering User Email is Mandatory');
+      return;
+    }
+    try {
+      const response = await axios.post(
+        'http://192.168.79.116:3500/v1/api/verification/send-email',
+        {
+          userEmail: userEmail,
+        },
+      );
+      setSuccess(true);
+      navigation.navigate('ForgotPasswordPage');
+    } catch (error) {
+      console.error('Error:', error.response);
+      setMessage('Unable to process your request due to an error');
+      setSuccess(false);
+    }
+  };
   const handleUserSignIn = async () => {
     if (!userEmail || !userPassword) {
       Alert.alert('Entering all fields is mandatory');
@@ -63,6 +86,11 @@ const SignIn = () => {
           style={styles.textButtonOuterStyling}
           onPress={handleUserSignIn}>
           <Text style={styles.textButtonInnerStyling}>Sign In</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.textButtonOuterStyling}
+          onPress={handleEmailSending}>
+          <Text style={styles.textButtonInnerStyling}>Forgot Password ?</Text>
         </TouchableOpacity>
         <Link to={{screen: 'SignUp'}} style={styles.bottomTextStyling}>
           Not having an account Sign Up Here !

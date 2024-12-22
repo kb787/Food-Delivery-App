@@ -28,6 +28,8 @@ import CartDisplay from './components/booked-items/CartDisplay';
 import {CartProvider} from './components/booked-items/CartCreation';
 import TrackLocation from './components/item-location-tracking/TrackLocation';
 import env from './env';
+import ForgotPasswordPage from './components/authentication/ForgotPasswordPage';
+import HomepageModified from './components/homescreen/HomepageModified';
 const Stack = createStackNavigator();
 
 type SectionProps = PropsWithChildren<{
@@ -70,8 +72,9 @@ function App(): React.JSX.Element {
   return (
     <CartProvider>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Homepage">
-          <Stack.Screen name="Homepage" component={Homepage} />
+        <Stack.Navigator initialRouteName="HomepageModified">
+          {/* <Stack.Screen name="Homepage" component={Homepage} /> */}
+          <Stack.Screen name="HomepageModified" component={HomepageModified} />
           <Stack.Screen name="SignUp" component={SignUp} />
           <Stack.Screen name="SignIn" component={SignIn} />
           <Stack.Screen
@@ -79,7 +82,10 @@ function App(): React.JSX.Element {
             component={MainProductScreen}
           />
           <Stack.Screen name="CartDisplay" component={CartDisplay} />
-          <Stack.Screen name="TrackLocation" component={TrackLocation} />
+          <Stack.Screen
+            name="ForgotPasswordPage"
+            component={ForgotPasswordPage}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </CartProvider>
