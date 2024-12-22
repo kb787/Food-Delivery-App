@@ -7,10 +7,12 @@ import {
   TouchableOpacity,
   Alert,
   SafeAreaView,
+  Image,
 } from 'react-native';
 import React from 'react';
 import {useState} from 'react';
 import {Link, useNavigation} from '@react-navigation/native';
+import imageLocation from '../../images/imageLocation.png';
 import axios from 'axios';
 
 const SignUp = () => {
@@ -42,43 +44,64 @@ const SignUp = () => {
       Alert.alert(` Unable to login due to error ${error}`);
     }
   };
+
   return (
     <SafeAreaView style={styles.mainContainer}>
-      <View style={styles.formContainer}>
-        <Text style={styles.headingText}>
-          Create your account in simple steps !
-        </Text>
-        <TextInput
-          type="text"
-          style={styles.textInputStyling}
-          value={userName}
-          onChangeText={text => setUserName(text)}
-          placeholder="Enter your user name"
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <Text style={styles.headerText}>Signup</Text>
+        <Image
+          source={imageLocation}
+          style={styles.image}
+          resizeMode="contain"
         />
-        <TextInput
-          keyboardType="email-address"
-          style={styles.textInputStyling}
-          value={userEmail}
-          onChangeText={text => setUserEmail(text)}
-          placeholder="Enter your email address"
-        />
-        <TextInput
-          type="password"
-          style={styles.textInputStyling}
-          value={userPassword}
-          onChangeText={text => setUserPassword(text)}
-          placeholder="Enter your password"
-          secureTextEntry={true}
-        />
-        <TouchableOpacity
-          style={styles.textButtonOuterStyling}
-          onPress={handleUserSignUp}>
-          <Text style={styles.textButtonInnerStyling}>Sign Up</Text>
-        </TouchableOpacity>
-        <Link to={{screen: 'SignIn'}} style={styles.bottomTextStyling}>
-          Already having an account Sign In Here !
-        </Link>
-      </View>
+
+        <View style={styles.formContainer}>
+          <View style={styles.inputContainer}>
+            <Text style={styles.label}>Username</Text>
+            <TextInput
+              style={styles.textInputStyling}
+              value={userName}
+              onChangeText={text => setUserName(text)}
+              placeholder="Enter your user name"
+              placeholderTextColor="#666"
+            />
+          </View>
+
+          <View style={styles.inputContainer}>
+            <Text style={styles.label}>Email Address</Text>
+            <TextInput
+              keyboardType="email-address"
+              style={styles.textInputStyling}
+              value={userEmail}
+              onChangeText={text => setUserEmail(text)}
+              placeholder="Enter your email address"
+              placeholderTextColor="#666"
+            />
+          </View>
+
+          <View style={styles.inputContainer}>
+            <Text style={styles.label}>Password</Text>
+            <TextInput
+              style={styles.textInputStyling}
+              value={userPassword}
+              onChangeText={text => setUserPassword(text)}
+              placeholder="Enter your password"
+              secureTextEntry={true}
+              placeholderTextColor="#666"
+            />
+          </View>
+
+          <TouchableOpacity
+            style={styles.textButtonOuterStyling}
+            onPress={handleUserSignUp}>
+            <Text style={styles.textButtonInnerStyling}>Sign Up</Text>
+          </TouchableOpacity>
+
+          <Link to={{screen: 'SignIn'}} style={styles.bottomTextStyling}>
+            Already having an account? Sign In Here!
+          </Link>
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -88,62 +111,62 @@ export default SignUp;
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    backgroundColor: 'rgb(248 250 252)',
+    backgroundColor: 'white',
+  },
+  scrollContainer: {
+    flexGrow: 1,
+  },
+  headerText: {
+    fontSize: 25,
+    fontWeight: 'bold',
+    marginLeft: '5%',
+    marginTop: '5%',
+  },
+  image: {
+    width: '100%',
+    height: 250,
+    marginVertical: 12,
   },
   formContainer: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingTop: '2%',
+    width: '100%',
+    paddingHorizontal: '5%',
   },
-  headingCollection: {
-    display: 'flex',
-    justifyContent: 'center',
-    padding: '5%',
-    flexDirection: 'row',
-    gap: 8,
+  inputContainer: {
+    width: '100%',
+    marginBottom: 15,
   },
-  headingText: {
-    fontSize: 18,
-    paddingTop: 1,
-    textAlign: 'center',
-  },
-  fontIconContainer: {
-    borderColor: 'black',
-    borderWidth: 2,
-    padding: 5,
-    borderRadius: 50,
+  label: {
+    fontSize: 16,
+    fontWeight: '500',
+    marginBottom: 5,
+    color: '#333',
   },
   textInputStyling: {
-    display: 'flex',
-    width: '85%',
-    height: '12%',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: '5%',
+    width: '100%',
+    height: 45,
     borderColor: 'black',
     borderWidth: 2,
     borderRadius: 6,
-    textAlign: 'center',
+    paddingHorizontal: 15,
+    textAlign: 'left',
   },
   textButtonOuterStyling: {
     backgroundColor: 'rgb(194 65 12)',
-    color: 'white',
-    width: '85%',
-    height: '12%',
-    marginTop: '5%',
+    width: '100%',
+    height: 45,
+    marginTop: 20,
     borderRadius: 8,
     justifyContent: 'center',
     alignItems: 'center',
   },
   textButtonInnerStyling: {
-    textAlign: 'center',
     fontSize: 18,
     color: 'white',
   },
   bottomTextStyling: {
     fontSize: 15,
     textAlign: 'center',
-    marginTop: '7%',
+    marginTop: 20,
+    marginBottom: 30,
   },
 });

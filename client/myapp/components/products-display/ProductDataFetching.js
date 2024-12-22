@@ -190,15 +190,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   pageButtonOuterStyling: {
-    backgroundColor: '#f0f0f0',
-    padding: '5%',
+    backgroundColor: 'rgb(59 130 246)',
+    paddingVertical: '2%',
+    paddingHorizontal: '5%',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 8,
     margin: '4%',
   },
   pageButtonTextStyling: {
-    color: 'black',
+    color: 'white',
     fontSize: 18,
   },
 });

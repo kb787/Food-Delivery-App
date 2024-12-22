@@ -52,8 +52,8 @@ const handleSearching = async (req, res) => {
   const { productName, productRate, productType, page } = req.query;
   try {
     const productAllTypes = ["Veg", "Non-Veg"];
-    const productRateFilter = productRate || 500;
-    const productTypeFilter = productType || [...productAllTypes];
+    const productRateFilter = productRate || 400;
+    const productTypeFilter = productType || "veg";
     const productNameFilter = productName || "";
     const page = req.query.page - 1 || 0;
     const limit = 12;
@@ -62,7 +62,7 @@ const handleSearching = async (req, res) => {
       .find({
         $and: [
           ({ productName: { $regex: productNameFilter, $options: "i" } },
-          { productType: { $in: productAllTypes } },
+          { productType: { $in: productTypeFilter } },
           { productRate: { $lt: productRateFilter } }),
         ],
       })
