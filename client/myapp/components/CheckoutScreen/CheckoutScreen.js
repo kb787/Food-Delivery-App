@@ -1,111 +1,4 @@
-// import React, {useEffect} from 'react';
-// import {useStripe} from '@stripe/stripe-react-native';
-// import {useState} from 'react';
-// import {
-//   Button,
-//   SafeAreaView,
-//   Alert,
-//   StyleSheet,
-//   TouchableOpacity,
-//   Text,
-//   View,
-// } from 'react-native';
-
-// const CheckoutScreen = () => {
-//   const {initPaymentSheet, presentPaymentSheet} = useStripe();
-//   const [loading, setLoading] = useState(false);
-
-//   const fetchPaymentSheetParams = async () => {
-//     const response = await fetch('http://192.168.209.116:3500/payment-sheet', {
-//       method: 'POST',
-//       headers: {
-//         'Content-Type': 'application/json',
-//       },
-//     });
-
-//     const {paymentIntent, ephemeralKey, customer} = await response.json();
-
-//     return {
-//       paymentIntent,
-//       ephemeralKey,
-//       customer,
-//     };
-//   };
-
-//   const initializePaymentSheet = async () => {
-//     const {paymentIntent, ephemeralKey, customer} =
-//       await fetchPaymentSheetParams();
-
-//     const {error} = await initPaymentSheet({
-//       merchantDisplayName: 'Example, Inc.',
-//       customerId: customer,
-//       customerEphemeralKeySecret: ephemeralKey,
-//       paymentIntentClientSecret: paymentIntent,
-//       allowsDelayedPaymentMethods: true,
-//       defaultBillingDetails: {
-//         name: 'Jane Doe',
-//       },
-//     });
-//     if (!error) {
-//       setLoading(true);
-//     }
-//   };
-
-//   const openPaymentSheet = async () => {
-//     const {error} = await presentPaymentSheet();
-
-//     if (error) {
-//       Alert.alert(`Error code: ${error.code}`, error.message);
-//     } else {
-//       Alert.alert('Success', 'Your order is confirmed!');
-//     }
-//   };
-
-//   useEffect(() => {
-//     initializePaymentSheet();
-//   }, []);
-
-//   return (
-//     <SafeAreaView>
-//       <View style={styles.buttonWrapping}>
-//         <TouchableOpacity
-//           style={styles.buttonOuterStyling}
-//           onPress={openPaymentSheet}>
-//           <Text style={styles.buttonInnerStyling}>Proceed for Payment</Text>
-//         </TouchableOpacity>
-//       </View>
-//     </SafeAreaView>
-//   );
-// };
-
-// export default CheckoutScreen;
-// const styles = StyleSheet.create({
-//   CheckoutButto: {
-//     padding: '2%',
-//   },
-//   buttonWrapping: {
-//     display: 'flex',
-//     justifyContent: 'center',
-//     alignItems: 'center',
-//     padding: 0,
-//     marginTop: '5%',
-//     marginBottom: '5%',
-//   },
-//   buttonOuterStyling: {
-//     backgroundColor: 'rgb(59 130 246)',
-//     padding: '4%',
-//     justifyContent: 'center',
-//     alignItems: 'center',
-//     borderRadius: 15,
-//     width: '85%',
-//   },
-//   buttonInnerStyling: {
-//     color: 'white',
-//     fontSize: 18,
-//     textAlign: 'center',
-//   },
-// });
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {useStripe} from '@stripe/stripe-react-native';
 import {
   SafeAreaView,
@@ -117,15 +10,46 @@ import {
   ActivityIndicator,
 } from 'react-native';
 
-const CheckoutScreen = () => {
+const CheckoutScreen = ({cartData, totalPrice}) => {
   const {initPaymentSheet, presentPaymentSheet} = useStripe();
-  const [loading, setLoading] = useState(true);
-  const [paymentSheetEnabled, setPaymentSheetEnabled] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [paymentInitialized, setPaymentInitialized] = useState(false);
 
+  const handleCheckout = async () => {
+    try {
+      const response = await fetch(
+        'http://192.168.209.116:3500/v1/api/checkout',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            cart: cartData,
+            totalPrice: totalPrice,
+          }),
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error('Checkout failed');
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Error during checkout:', error);
+      Alert.alert(
+        'Error',
+        'Unable to process checkout. Please try again later.',
+      );
+      return null;
+    }
+  };
   const fetchPaymentSheetParams = async () => {
     try {
       const response = await fetch(
-        'http://192.168.209.116:3500/payment-sheet',
+        'http://192.168.209.116:3500/v1/api/payment-sheet',
         {
           method: 'POST',
           headers: {
@@ -150,7 +74,6 @@ const CheckoutScreen = () => {
         'Error',
         'Unable to initialize payment. Please try again later.',
       );
-      setLoading(false);
       return null;
     }
   };
@@ -161,7 +84,7 @@ const CheckoutScreen = () => {
       const params = await fetchPaymentSheetParams();
 
       if (!params) {
-        return;
+        return false;
       }
 
       const {paymentIntent, ephemeralKey, customer} = params;
@@ -183,55 +106,86 @@ const CheckoutScreen = () => {
           'Error',
           'Unable to initialize payment. Please try again later.',
         );
-      } else {
-        setPaymentSheetEnabled(true);
+        return false;
       }
+
+      return true;
     } catch (error) {
       console.error('Error in initializePaymentSheet:', error);
       Alert.alert(
         'Error',
         'Unable to initialize payment. Please try again later.',
       );
-    } finally {
-      setLoading(false);
+      return false;
     }
   };
 
-  const openPaymentSheet = async () => {
-    if (!paymentSheetEnabled) {
-      Alert.alert(
-        'Error',
-        'Payment sheet is not initialized yet. Please wait.',
-      );
-      return;
-    }
-
+  const handlePayment = async () => {
     try {
+      setLoading(true);
+      if (!paymentInitialized) {
+        const initialized = await initializePaymentSheet();
+        if (!initialized) {
+          setLoading(false);
+          return;
+        }
+        setPaymentInitialized(true);
+      }
+
       const {error} = await presentPaymentSheet();
 
       if (error) {
         Alert.alert(`Error code: ${error.code}`, error.message);
       } else {
         Alert.alert('Success', 'Your order is confirmed!');
-        // Reset the payment sheet state after successful payment
-        setPaymentSheetEnabled(false);
-        setLoading(true);
-        // Reinitialize for next payment
-        await initializePaymentSheet();
+        setPaymentInitialized(false);
       }
     } catch (error) {
-      console.error('Error presenting payment sheet:', error);
+      console.error('Error handling payment:', error);
       Alert.alert(
         'Error',
         'Unable to process payment. Please try again later.',
       );
+    } finally {
+      setLoading(false);
     }
   };
+  // const handlePayment = async () => {
+  //   try {
+  //     setLoading(true);
+  //     const checkoutResult = await handleCheckout();
+  //     if (!checkoutResult) {
+  //       setLoading(false);
+  //       return;
+  //     }
 
-  useEffect(() => {
-    initializePaymentSheet();
-  }, []);
+  //     if (!paymentInitialized) {
+  //       const initialized = await initializePaymentSheet();
+  //       if (!initialized) {
+  //         setLoading(false);
+  //         return;
+  //       }
+  //       setPaymentInitialized(true);
+  //     }
 
+  //     const {error} = await presentPaymentSheet();
+
+  //     if (error) {
+  //       Alert.alert(`Error code: ${error.code}`, error.message);
+  //     } else {
+  //       Alert.alert('Success', 'Your order is confirmed!');
+  //       setPaymentInitialized(false); // Reset for next payment
+  //     }
+  //   } catch (error) {
+  //     console.error('Error handling payment:', error);
+  //     Alert.alert(
+  //       'Error',
+  //       'Unable to process payment. Please try again later.',
+  //     );
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.buttonWrapping}>
@@ -239,17 +193,9 @@ const CheckoutScreen = () => {
           <ActivityIndicator size="large" color="rgb(59 130 246)" />
         ) : (
           <TouchableOpacity
-            style={[
-              styles.buttonOuterStyling,
-              !paymentSheetEnabled && styles.buttonDisabled,
-            ]}
-            onPress={openPaymentSheet}
-            disabled={!paymentSheetEnabled}>
-            <Text style={styles.buttonInnerStyling}>
-              {paymentSheetEnabled
-                ? 'Proceed for Payment'
-                : 'Initializing Payment...'}
-            </Text>
+            style={styles.buttonOuterStyling}
+            onPress={handlePayment}>
+            <Text style={styles.buttonInnerStyling}>Proceed for Payment</Text>
           </TouchableOpacity>
         )}
       </View>
@@ -276,9 +222,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 15,
     width: '85%',
-  },
-  buttonDisabled: {
-    backgroundColor: 'rgba(59, 130, 246, 0.5)',
   },
   buttonInnerStyling: {
     color: 'white',

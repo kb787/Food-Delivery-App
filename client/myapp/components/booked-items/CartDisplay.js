@@ -2,6 +2,7 @@ import React from 'react';
 import {useCart} from './CartCreation';
 import {useState, useEffect} from 'react';
 import Stripepaymentgateway from '../CheckoutScreen/Stripepaymentgateway';
+import PaymentScreen from '../razorpay-gateway/PaymentScreen';
 import {
   View,
   Text,
@@ -25,7 +26,7 @@ const CartDisplay = () => {
     setLoading(true);
 
     try {
-      const response = await fetch('http://192.168.79.116:3500/api/checkout', {
+      const response = await fetch('http://192.168.209.116:3500/api/checkout', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -108,7 +109,14 @@ const CartDisplay = () => {
               <Text style={styles.totalPriceText}>
                 Total Price: ₹{calculateTotalPrice()}
               </Text>
-              <Stripepaymentgateway />
+              {/* <Stripepaymentgateway
+                cartItems={cart}
+                totalAmount={calculateTotalPrice()}
+              /> */}
+              <PaymentScreen
+                paymentData={cart}
+                paymentAmount={calculateTotalPrice()}
+              />
             </React.Fragment>
           )}
         </View>
