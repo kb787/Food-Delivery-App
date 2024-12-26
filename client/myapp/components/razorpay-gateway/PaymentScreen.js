@@ -14,15 +14,20 @@ const PaymentScreen = ({paymentData, paymentAmount}) => {
 
   const createOrder = async () => {
     try {
+      const amount = Math.abs(Number(paymentAmount));
+
+      if (!amount || isNaN(amount)) {
+        throw new Error('Invalid payment amount');
+      }
       const response = await fetch(
-        'http://192.168.209.116:3500/v1/api/create-order',
+        'http://192.168.68.116:3500/v1/api/create-order',
         {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            paymentAmount,
+            amount: amount,
             currency: 'INR',
           }),
         },
@@ -43,7 +48,7 @@ const PaymentScreen = ({paymentData, paymentAmount}) => {
   const verifyPayment = async () => {
     try {
       const response = await fetch(
-        'http://192.168.209.116:3500/v1/api/verify-payment',
+        'http://192.168.68.116:3500/v1/api/verify-payment',
         {
           method: 'POST',
           headers: {
@@ -68,7 +73,11 @@ const PaymentScreen = ({paymentData, paymentAmount}) => {
   const handlePayment = async () => {
     try {
       setLoading(true);
-      const amount = parseInt(paymentAmount); // Amount in rupees
+      const amount = Math.round(Number(paymentAmount));
+
+      if (!amount || isNaN(amount)) {
+        throw new Error('Invalid payment amount');
+      }
       const order = await createOrder();
 
       const options = {
@@ -79,7 +88,7 @@ const PaymentScreen = ({paymentData, paymentAmount}) => {
         key: 'liMZIFyTDZTFVZMgdgoFK0No',
         amount: amount,
         name: 'Your Company Name',
-        order_id: order.data.orderId,
+        order_id: order.orderId,
         prefill: {
           email: 'karan@example.com',
           contact: '9999999999',
@@ -89,8 +98,6 @@ const PaymentScreen = ({paymentData, paymentAmount}) => {
       };
       console.log(options);
       const data = await RazorpayCheckout.open(options);
-
-      // Verify payment
       const verificationResult = await verifyPayment({
         razorpay_order_id: data.razorpay_order_id,
         razorpay_payment_id: data.razorpay_payment_id,
@@ -99,7 +106,6 @@ const PaymentScreen = ({paymentData, paymentAmount}) => {
       console.log(verificationResult);
       if (verificationResult.verified) {
         Alert.alert('Success', 'Payment successful!');
-        // Handle successful payment (e.g., update order status, navigate to success screen)
       } else {
         Alert.alert('Error', 'Payment verification failed');
       }

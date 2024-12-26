@@ -30,7 +30,7 @@ const SignIn = () => {
     }
     try {
       const response = await axios.post(
-        'http://192.168.79.116:3500/v1/api/verification/send-email',
+        'http://192.168.68.116:3500/v1/api/verification/send-email',
         {
           userEmail: userEmail,
         },
@@ -49,7 +49,7 @@ const SignIn = () => {
     }
     try {
       const postResponse = await axios.post(
-        'http://192.168.209.116:3500/v1/api/auth/signin-user ',
+        'http://192.168.68.116:3500/v1/api/auth/signin-user ',
         {
           userEmail: userEmail,
           userPassword: userPassword,
